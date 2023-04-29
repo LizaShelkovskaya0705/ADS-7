@@ -8,16 +8,16 @@ template<typename T>
 class TPQueue {
  private:
     struct Item {
-        T DATA;
-        Item* NEXT;
-        Item* LAST;
+        T data;
+        Item* next;
+        Item* last;
     };
-    Item* HEAD;
-    Item* TAIL;
+    Item* head;
+    Item* tail;
     TPQueue::Item* create(const T&);
 
  public:
-    TPQueue() : HEAD(nullptr), TAIL(nullptr) { }
+    TPQueue() : head(nullptr), tail(nullptr) { }
     ~TPQueue();
     void push(const T&);
     T pop();
@@ -32,76 +32,76 @@ struct SYM {
 template <typename T>
 typename TPQueue<T>::Item* TPQueue<T>::create(const T& data) {
     Item* item = new Item;
-    item->DATA = DATA;
-    item->NEXT = nullptr;
-    item->LAST = nullptr;
+    item->data = data;
+    item->next = nullptr;
+    item->last = nullptr;
     return item;
 }
 
 template <typename T>
 T TPQueue<T>::pop() {
-    if (!HEAD) {
-        throw std::string("TPQueue - empty");
+    if (!head) {
+        throw std::string("TPQueue is empty!");
     } else {
-        Item* temp = HEAD->NEXT;
-        T DATA = HEAD->DATA;
-        delete HEAD;
-        HEAD = temp;
-        return DATA;
+        Item* temp = head->next;
+        T data = head->data;
+        delete head;
+        head = temp;
+        return data;
     }
 }
 
 template <typename T>
 TPQueue<T>::~TPQueue() {
-    while (HEAD) {
+    while (head) {
         pop();
     }
 }
 
 template <typename T>
 void TPQueue<T>::print() const {
-    Item* uk = HEAD;
+    Item* uk = head;
     while (uk) {
-        std::cout << uk->DATA << " ";
-        uk = uk->NEXT;
+        std::cout << uk->data << " ";
+        uk = uk->next;
     }
     std::cout << std::endl;
 }
 
 template <typename T>
 void TPQueue<T>::push(const T& value) {
-    if (HEAD == nullptr) {
-        HEAD = create(value);
-        TAIL = HEAD;
-    } else if (TAIL->DATA.prior >= value.prior) {
-        if (TAIL->DATA.ch == value.ch) {
-            TAIL->DATA = value;
+    if (head == nullptr) {
+        head = create(value);
+        tail = head;
+    } else if (tail->data.prior >= value.prior) {
+        if (tail->data.ch == value.ch) {
+            tail->data = value;
         } else {
-            TAIL->NEXT = create(value);
-            TAIL->NEXT->LAST = TAIL;
-            TAIL = TAIL->NEXT;
+            tail->next = create(value);
+            tail->next->last = tail;
+            tail = tail->next;
         }
-    } else if (HEAD == TAIL) {
-        TAIL->LAST = create(value);
-        HEAD = TAIL->LAST;
-        HEAD->NEXT = TAIL;
+    } else if (head == tail) {
+        tail->last = create(value);
+        head = tail->last;
+        head->next = tail;
     } else {
-        Item* tmp = TAIL;
-        while (tmp != HEAD && tmp->DATA.prior < value.prior) {
-            tmp = tmp->LAST;
+        Item* tmp = tail;
+        while (tmp != head && tmp->data.prior < value.prior) {
+            tmp = tmp->last;
         }
-        if (tmp->DATA.prior > value.prior) {
+        if (tmp->data.prior > value.prior) {
             Item* cell = new Item;
-            cell->NEXT = tmp->NEXT;
-            cell->LAST = tmp;
-            cell->DATA = value;
-            tmp->NEXT->LAST = cell;
-            tmp->NEXT = cell;
+            cell->next = tmp->next;
+            cell->last = tmp;
+            cell->data = value;
+            tmp->next->last = cell;
+            tmp->next = cell;
         }
-        if (tmp == HEAD && tmp->DATA.prior < value.prior) {
-            HEAD->LAST = create(value);
-            HEAD = HEAD->LAST;
-            HEAD->NEXT = tmp;
+        if (tmp == head && tmp->data.prior < value.prior) {
+            head->last = create(value);
+            head = head->last;
+            head->next = tmp;
         }
     }
 }
