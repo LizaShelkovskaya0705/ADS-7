@@ -30,7 +30,7 @@ struct SYM {
 };
 
 template <typename T>
-typename TPQueue<T>::Item* TPQueue<T>::create(const T& data){
+typename TPQueue<T>::Item* TPQueue<T>::create(const T& data) {
     Item* item = new Item;
     item->DATA = DATA;
     item->NEXT = nullptr;
@@ -39,7 +39,7 @@ typename TPQueue<T>::Item* TPQueue<T>::create(const T& data){
 }
 
 template <typename T>
-T TPQueue<T>::pop(){
+T TPQueue<T>::pop() {
     if (!HEAD) {
         throw std::string("TPQueue - empty");
     } else {
